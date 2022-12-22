@@ -204,11 +204,21 @@ endif
 
 " ---------------------------------------------------------------------
 " Default option values: {{{2
-let g:netrw_localcopycmdopt    = ""
-let g:netrw_localcopydircmdopt = ""
-let g:netrw_localmkdiropt      = ""
-let g:netrw_localmovecmdopt    = ""
-let g:netrw_localrmdiropt      = ""
+if (!exists("g:netrw_localcopycmdopt"))
+  let g:netrw_localcopycmdopt    = ""
+endif
+if (!exists("g:netrw_localcopydircmdopt"))
+  let g:netrw_localcopydircmdopt = ""
+endif
+if (!exists("g:netrw_localmkdiropt"))
+  let g:netrw_localmkdiropt      = ""
+endif
+if (!exists("g:netrw_localmovecmdopt"))
+  let g:netrw_localmovecmdopt    = ""
+endif
+if (!exists("g:netrw_localrmdiropt"))
+  let g:netrw_localrmdiropt      = ""
+endif
 
 " ---------------------------------------------------------------------
 " Default values for netrw's global protocol variables {{{2
@@ -7199,7 +7209,7 @@ fun! s:NetrwMarkFileCopy(islocal,...)
 "   call Decho("tgt    <".tgt.">",'~'.expand("<slnum>"))
 "   call Decho("copycmd<".copycmd.">",'~'.expand("<slnum>"))
 "   call Decho("system(".copycmd." '".args."' '".tgt."')",'~'.expand("<slnum>"))
-   call system(copycmd.g:netrw_localcopycmdopt." '".args."' '".tgt."'")
+   call system(copycmd.g:netrw_localcopycmdopt." ".args." ".tgt)
    if v:shell_error != 0
     if exists("b:netrw_curdir") && b:netrw_curdir != getcwd() && !g:netrw_keepdir
      call netrw#ErrorMsg(s:ERROR,"copy failed; perhaps due to vim's current directory<".getcwd()."> not matching netrw's (".b:netrw_curdir.") (see :help netrw-cd)",101)
@@ -11418,7 +11428,7 @@ fun! s:NetrwLocalRmFile(path,fname,all)
       endif
      endif
     else
-     if delete(rmfile,"d")
+     if delete(rmfile,"rf")
       call netrw#ErrorMsg(s:ERROR,"unable to delete directory <".rmfile.">!",103)
      endif
     endif
